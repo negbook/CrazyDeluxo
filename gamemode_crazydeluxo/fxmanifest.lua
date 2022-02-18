@@ -3,6 +3,7 @@ resource_type 'gametype' { name = 'Crazy Deluxo' }
 
 
 client_scripts {
+'init.lua',
 'main.lua'
 }
 server_scripts {

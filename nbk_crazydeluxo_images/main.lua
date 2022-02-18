@@ -39,24 +39,16 @@ local handle_CrazyDrift
 local handle_Combo
 local handle_Combobg
 local handle_Warning
-Tasksync.addloop("hud",0,function()
-	 HideHudComponentThisFrame( 1 ) -- Wanted Stars
-     HideHudComponentThisFrame( 2 ) -- Weapon Icon
-     HideHudComponentThisFrame( 3 ) -- Cash
-     HideHudComponentThisFrame( 4 ) -- MP Cash
-     --HideHudComponentThisFrame( 6 ) -- Vehicle Name
-     --HideHudComponentThisFrame( 7 ) -- Area Name
-     --HideHudComponentThisFrame( 8 ) -- Vehicle Class      
-     --HideHudComponentThisFrame( 9 ) -- Street Name
-     HideHudComponentThisFrame( 13 ) -- Cash Change
-     --HideHudComponentThisFrame( 17 ) -- Save Game  
-     HideHudComponentThisFrame( 20 ) -- Weapon Stats 
-end) 
+Records = {}
+Records["arcade"] = {}
+Records["original"] = {}
+ShowRecord = false 
+
 CreateThread(function()
 	--//////////////D//R//A//W//////////--
 	if not handle_HeadNumber then 
 		handle_HeadNumber = TextDrawCreate(0.5,0.5,"")
-		TextDrawTextSize(handle_HeadNumber,50/24,50/24)
+		TextDrawTextSize(handle_HeadNumber,30/24,30/24)
 		TextDrawUseBox(handle_HeadNumber,false)
 		TextDrawFont(handle_HeadNumber,2)
 		TextDrawColor(handle_HeadNumber,0x00ff00ff)
@@ -226,7 +218,7 @@ end)
 
 AddEventHandler('nbk_crazydeluxo_images:draw', function(txt)
 	if not Tasksync.ScaleformIsDrawing('nbk_crazydeluxo_images') then 
-    Tasksync.ScaleformDraw('nbk_crazydeluxo_images')
+    Tasksync.ScaleformDraw('nbk_crazydeluxo_images',nil,5)
 	end 
 end)
 AddEventHandler('nbk_crazydeluxo_images:end', function(txt)
@@ -255,6 +247,7 @@ end)
 AddEventHandler('nbk_crazydeluxo_images:show_home', function(txt)
     Tasksync.ScaleformCall('nbk_crazydeluxo_images',function(run)
         run("SHOW_HOME")
+		nowselection = 1
     end)
 end)
 AddEventHandler('nbk_crazydeluxo_images:show_result', function(txt)
@@ -268,7 +261,7 @@ AddEventHandler('nbk_crazydeluxo_images:show_records', function(txt)
     end)
 end)
 AddEventHandler('nbk_crazydeluxo_images:set_records_arcade', function(rank,name,scores)
-	print(rank,name,scores)
+	--print(rank,name,scores)
     Tasksync.ScaleformCall('nbk_crazydeluxo_images',function(run)
         run("SET_RECORDS_ARCADE",tonumber(rank),"name",name)
 		run("SET_RECORDS_ARCADE",tonumber(rank),"scores",scores)
@@ -290,9 +283,13 @@ AddEventHandler('nbk_crazydeluxo_images:setTotalEarned', function(num)
         run("SET_TOTALEARNED",num)
     end)
 end)
-AddEventHandler('nbk_crazydeluxo_images:setRanking', function(txt)
+
+AddEventHandler('nbk_crazydeluxo_images:setRanking', function(txt,nowmode,total)
     Tasksync.ScaleformCall('nbk_crazydeluxo_images',function(run)
         run("SET_RANKING",txt)
+		if nowmode and total then 
+			SetRankIntoResult(nowmode,total)
+		end 
     end)
 end)
 AddEventHandler('nbk_crazydeluxo_images:setClass', function(txt)
@@ -300,7 +297,144 @@ AddEventHandler('nbk_crazydeluxo_images:setClass', function(txt)
         run("SET_CLASS",txt)
     end)
 end)
+
+function SetRankIntoResult(mode,total)
+	CreateThread(function()
+		TriggerServerEvent("es_ranking_db:getRecords","arcade")
+		TriggerServerEvent("es_ranking_db:getRecords","original")
+		Wait(2000)
+		local nowranking = 0
+		--print(mode,#Records[mode])
+		if Records[mode] and Records[mode][1] then 
+			for i=1,#Records[mode] do 
+				--print(TotalEarned,Records[mode][i].scores,i)
+				if tonumber(total) <= tonumber(Records[mode][i].scores) then 
+					nowranking = i;
+				end 
+			end 
+		else 
+			nowranking = "???"
+		end 
+		--print(nowranking)
+		TriggerEvent("nbk_crazydeluxo_images:setRanking",nowranking)
+	end )
+end 
 RegisterNetEvent("nbk_crazydeluxo_images:updateRecords", function(mode,records)
-    --print(mode,json.encode(records))
+	
+    Records[mode] = records
+	
+	if Records then 
+		if mode == "arcade" then 
+			for i=1,#Records["arcade"] do 
+				if i <= 5 then 
+				TriggerEvent("nbk_crazydeluxo_images:set_records_arcade",i,Records["arcade"][i].playername,"$"..Records["arcade"][i].scores)
+				end 
+			end 
+		end 
+		if mode == "original" then 
+			for i=1,#Records["original"] do 
+				if i <= 5 then 
+				TriggerEvent("nbk_crazydeluxo_images:set_records_original",i,Records["original"][i].playername,"$"..Records["original"][i].scores)
+				end 
+			end 
+		end 
+	end 
 end)
 
+Tasksync.addloop("hud",0,function()
+	HideHudComponentThisFrame( 1 ) -- Wanted Stars
+	HideHudComponentThisFrame( 2 ) -- Weapon Icon
+	HideHudComponentThisFrame( 3 ) -- Cash
+	HideHudComponentThisFrame( 4 ) -- MP Cash
+	--HideHudComponentThisFrame( 6 ) -- Vehicle Name
+	--HideHudComponentThisFrame( 7 ) -- Area Name
+	--HideHudComponentThisFrame( 8 ) -- Vehicle Class      
+	--HideHudComponentThisFrame( 9 ) -- Street Name
+	HideHudComponentThisFrame( 13 ) -- Cash Change
+	--HideHudComponentThisFrame( 17 ) -- Save Game  
+	HideHudComponentThisFrame( 20 ) -- Weapon Stats 
+	if ShowRecord == true then 
+		if IsControlJustReleased(0--[[control type]],  177--[[control index]]) then 
+			TriggerEvent("gamemode_crazydeluxo:reload")
+			TriggerEvent("nbk_crazydeluxo_images:draw")
+			TriggerEvent("nbk_crazydeluxo_images:show_home")
+			TriggerEvent("nbk_crazydeluxo_images:selection_arcade")
+			ShowRecord = false 
+		end 
+	end 
+	-- ungly menu code
+	if nowselection ~= nil and nowselection ~= -1 then 
+		if IsControlJustReleased(0--[[control type]],  22--[[control index]]) or IsControlJustReleased(0--[[control type]],  23--[[control index]]) or IsControlJustReleased(0--[[control type]],  21--[[control index]]) then
+			if nowselection == 1 then 
+				TriggerEvent('gamemode_crazydeluxo:arcade')
+				--print('arcade')
+				TriggerEvent("nbk_crazydeluxo_images:end")
+				nowselection = -1
+			elseif nowselection == 2 then 
+				TriggerEvent('gamemode_crazydeluxo:original')
+				--print('original')
+				TriggerEvent("nbk_crazydeluxo_images:end")
+				nowselection = -1
+			elseif nowselection == 3 then 
+				ShowRecord = true 
+				TriggerEvent("nbk_crazydeluxo_images:show_records")
+				TriggerServerEvent("es_ranking_db:getRecords","arcade")
+				TriggerServerEvent("es_ranking_db:getRecords","original")
+				
+				if Records and Records["arcade"] and Records["arcade"] then 
+					for i=1,#Records["arcade"] do 
+						if i <= 5 then 
+						TriggerEvent("nbk_crazydeluxo_images:set_records_arcade",i,Records["arcade"][i].playername,"$"..Records["arcade"][i].scores)
+						end 
+					end 
+					for i=1,#Records["original"] do 
+						if i <= 5 then 
+						TriggerEvent("nbk_crazydeluxo_images:set_records_original",i,Records["original"][i].playername,"$"..Records["original"][i].scores)
+						end 
+					end 
+				end 
+				--nowselection = -1
+			elseif nowselection == 4 then 
+				RestartGame()
+				--print('quit')
+				TriggerEvent("nbk_crazydeluxo_images:end")
+				nowselection = -1
+			end 
+		end
+		if IsControlJustReleased(0--[[control type]],  172--[[control index]]) then --up 
+			if nowselection == 1 then 
+				nowselection = 4
+				TriggerEvent("nbk_crazydeluxo_images:selection_quit")
+			elseif nowselection == 2 then
+				nowselection = 1
+				TriggerEvent("nbk_crazydeluxo_images:selection_arcade")
+			elseif nowselection == 3 then
+				nowselection = 2
+				TriggerEvent("nbk_crazydeluxo_images:selection_original")	
+			elseif nowselection == 4 then
+				nowselection = 3
+				TriggerEvent("nbk_crazydeluxo_images:selection_records")
+			end 
+		end
+		if IsControlJustReleased(0--[[control type]],  173--[[control index]]) then --down
+			if nowselection == 1 then 
+				nowselection = 2
+				TriggerEvent("nbk_crazydeluxo_images:selection_original")
+			elseif nowselection == 2 then
+				nowselection = 3
+				TriggerEvent("nbk_crazydeluxo_images:selection_records")
+			elseif nowselection == 3 then
+				nowselection = 4
+				TriggerEvent("nbk_crazydeluxo_images:selection_quit")
+			elseif nowselection == 4 then
+				nowselection = 1
+				TriggerEvent("nbk_crazydeluxo_images:selection_arcade")
+			end 
+		end
+	elseif nowselection == -1 then  
+		TriggerEvent("nbk_crazydeluxo_images:end")
+		nowselection = nil 
+	end 
+end) 
+TriggerServerEvent("es_ranking_db:getRecords","arcade")
+TriggerServerEvent("es_ranking_db:getRecords","original")
