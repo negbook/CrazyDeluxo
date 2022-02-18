@@ -1,6 +1,9 @@
 load(LoadResourceFile("tasksync", 'tasksync_with_scaleform.lua.sourcecode'))()
 load(LoadResourceFile("tasksync", 'tasksync_with_drawtext.lua.sourcecode'))()
+PrepareMusicEvent("FRA1_SPEED");
+
 AddEventHandler('nbk_crazydeluxo_draw:getcoin', function(txt)
+	PlaySoundFrontend(-1, "PICK_UP", "HUD_FRONTEND_DEFAULT_SOUNDSET", true);
 	--https://github.com/negbook/nbk_damagemessage_freeversion 
 	DrawText2D = function(text,scale,x,y,a,r,g,b)
 		SetTextScale(scale/24, scale/24)
@@ -248,6 +251,9 @@ AddEventHandler('nbk_crazydeluxo_images:show_home', function(txt)
     Tasksync.ScaleformCall('nbk_crazydeluxo_images',function(run)
         run("SHOW_HOME")
 		nowselection = 1
+		
+		TriggerMusicEvent("FRA1_SPEED");
+		
     end)
 end)
 AddEventHandler('nbk_crazydeluxo_images:show_result', function(txt)
@@ -340,6 +346,276 @@ RegisterNetEvent("nbk_crazydeluxo_images:updateRecords", function(mode,records)
 		end 
 	end 
 end)
+PlayMusic = function(p_0,p_1,p_2)
+	if (p_0 == 0) then
+		TriggerMusicEvent("MP_MC_START");
+	
+	elseif (p_0 == 1) then
+		TriggerMusicEvent("MP_MC_START_CITY");
+	
+	elseif (p_0 == 2) then
+		TriggerMusicEvent("MP_MC_START_COUNTRY");
+	
+	elseif (p_0 == 3) then
+		TriggerMusicEvent("MP_MC_START");
+	
+	elseif (p_0 == 4) then
+		TriggerMusicEvent("MP_MC_START_CAR_STEAL_CHIPS_2");
+	
+	elseif (p_0 == 5) then
+		TriggerMusicEvent("MP_MC_START_EYE_IN_SKY_3");
+	
+	elseif (p_0 == 6) then
+		TriggerMusicEvent("MP_MC_START_FUNK_JAM_3");
+	
+	elseif (p_0 == 7) then
+		TriggerMusicEvent("MP_MC_START_FUNK_JAM_TWO_4");
+	
+	elseif (p_0 == 8) then
+		TriggerMusicEvent("MP_MC_START_BEYOND_4");
+	
+	elseif (p_0 == 9) then
+		TriggerMusicEvent("MP_MC_START_BURNING_BAR_8");
+	
+	elseif (p_0 == 10) then
+		TriggerMusicEvent("MP_MC_START_PB1_8");
+	
+	elseif (p_0 == 11) then
+		TriggerMusicEvent("MP_MC_START_DARK_ROBBERY_8");
+	
+	elseif (p_0 == 12) then
+		TriggerMusicEvent("MP_MC_START_DIAMOND_DIARY_8");
+	
+	elseif (p_0 == 13) then
+		TriggerMusicEvent("MP_MC_START_DEBUNKED_8");
+	
+	elseif (p_0 == 14) then
+		TriggerMusicEvent("MP_MC_START_PB2_PUSSYFACE_8");
+	
+	elseif (p_0 == 15) then
+		TriggerMusicEvent("MP_MC_START_DR_DESTRUCTO_8");
+	
+	elseif (p_0 == 16) then
+		TriggerMusicEvent("MP_MC_START_DRAGONER_8");
+	
+	elseif (p_0 == 17) then
+		TriggerMusicEvent("MP_MC_START_GREYHOUND_8");
+	
+	elseif (p_0 == 18) then
+		TriggerMusicEvent("MP_MC_START_MEATY_8");
+	
+	elseif (p_0 == 19) then
+		TriggerMusicEvent("MP_MC_START_MISSION_SEVEN_8");
+	
+	elseif (p_0 == 20) then
+		TriggerMusicEvent("MP_MC_START_NINE_BLURT_8");
+	
+	elseif (p_0 == 21) then
+		TriggerMusicEvent("MP_MC_START_SCRAP_YARD_8");
+	
+	elseif (p_0 == 22) then
+		TriggerMusicEvent("MP_MC_START_SILVER_PUSSY_8");
+	
+	elseif (p_0 == 23) then
+		TriggerMusicEvent("MP_MC_START_VODKA_8");
+	
+	elseif (p_0 == 24) then
+		TriggerMusicEvent("MP_MC_START_STREETS_OF_FORTUNE_8");
+	
+	elseif (p_0 == 25) then
+		TriggerMusicEvent("MP_MC_START_TRACK_EIGHT_8");
+	
+	elseif (p_0 == 26) then
+		TriggerMusicEvent("MP_MC_START_VACUUM_8");
+	
+	elseif (p_0 == 27) then
+		TriggerMusicEvent("MP_MC_START_VINEGAR_TITS_8");
+	
+	elseif (p_0 == 28) then
+		TriggerMusicEvent("MP_MC_START_CITY_8");
+	
+	elseif (p_0 == 29) then
+		TriggerMusicEvent("MP_MC_START_GUN_NOVEL_8");
+	
+	elseif (p_0 == 30) then
+		TriggerMusicEvent("MP_MC_START_CHOP_8");
+	
+	elseif (p_0 == 31) then
+		TriggerMusicEvent("MP_MC_START_NT_ELC_8");
+	
+	elseif (p_0 == 32) then
+		TriggerMusicEvent("MP_MC_START_NT_DEF_8");
+	
+	elseif (p_0 == 35) then
+		TriggerMusicEvent("MP_MC_START_NT_TKB_4");
+	
+	elseif (p_0 == 33) then
+		TriggerMusicEvent("MP_MC_START_HEIST_4");
+	
+	elseif (p_0 == 34) then
+		TriggerMusicEvent("MP_MC_START_HEIST_8");
+	
+	elseif (p_0 == 36) then
+		TriggerMusicEvent("MP_MC_START_HEIST_FIN_NEW");
+	
+	elseif (p_0 == 37) then
+		TriggerMusicEvent("MP_MC_START_HEIST_PREP_NEW");
+	
+	elseif (p_0 == 39) then
+		TriggerMusicEvent("START_RANDOM");
+	
+	elseif (p_0 == 40) then
+		TriggerMusicEvent("START_URBAN");
+	
+	elseif (p_0 == 41) then
+		TriggerMusicEvent("START_ROCK");
+	
+	elseif (p_0 == 42) then
+		TriggerMusicEvent("START_ELECTRONIC");
+	
+	elseif (p_0 == 43) then
+		TriggerMusicEvent("LOWRIDER_START_MUSIC");
+	
+	elseif (p_0 == 44) then
+		TriggerMusicEvent("LOWRIDER_FINALE_START_MUSIC");
+	
+	elseif (p_0 == 45) then
+		TriggerMusicEvent("HALLOWEEN_START_MUSIC");
+	
+	elseif (p_0 == 46) then
+		if (not p_2) then
+			TriggerMusicEvent("EXEC1_MP_MC_START_CITY");
+		
+		else
+			TriggerMusicEvent("EXEC1_MP_MC_START_CITY_STA");
+		
+		end
+	elseif (p_0 == 47) then
+		TriggerMusicEvent("EXEC1_START_BESPOKE_BROKE");
+	
+	elseif (p_0 == 48) then
+		TriggerMusicEvent("EXEC1_START_CAR_STEAL");
+	
+	elseif (p_0 == 49) then
+		TriggerMusicEvent("EXEC1_START_CLIFF12");
+	
+	elseif (p_0 == 50) then
+		TriggerMusicEvent("EXEC1_START_CLIFF18");
+	
+	elseif (p_0 == 51) then
+		TriggerMusicEvent("EXEC1_START_CLIFF19");
+	
+	elseif (p_0 == 52) then
+		TriggerMusicEvent("EXEC1_START_CLIFF33");
+	
+	elseif (p_0 == 53) then
+		TriggerMusicEvent("EXEC1_START_GET_ON_THE_MOVE");
+	
+	elseif (p_0 == 54) then
+		TriggerMusicEvent("EXEC1_START_PSYCHOPATH");
+	
+	elseif (p_0 == 55) then
+		TriggerMusicEvent("EXEC1_START_RED_SQUARE");
+	
+	elseif (p_0 == 56) then
+		TriggerMusicEvent("EXEC1_START_WHO_CALLED_POPO");
+	
+	elseif (p_0 == 57) then
+		TriggerMusicEvent("BKR_GS_START");
+	
+	elseif (p_0 == 58) then
+		TriggerMusicEvent("BKR_DEADLINE_START_MUSIC");
+	
+	elseif (p_0 == 59) then
+		TriggerMusicEvent("BA_METZ_DEBUNKED");
+	
+	elseif (p_0 == 60) then
+		TriggerMusicEvent("BIKER_LAD_START");
+	
+	elseif (p_0 == 61) then
+		TriggerMusicEvent("IE_TW_START");
+	
+	elseif (p_0 == 62) then
+		TriggerMusicEvent("IE_SVM_START");
+	
+	elseif (p_0 == 63) then
+		TriggerMusicEvent("MP_MC_GR_START");
+	
+	elseif (p_0 == 64) then
+		TriggerMusicEvent("MP_MC_SMG_START");
+	
+	elseif (p_0 == 65) then
+		TriggerMusicEvent("MP_MC_SMGH_START");
+	
+	elseif (p_0 == 66) then
+		TriggerMusicEvent("MP_MC_CMH_START");
+	
+	elseif (p_0 == 67) then
+		TriggerMusicEvent("MP_MC_CMH_SUB_PREP_START");
+	
+	elseif (p_0 == 68) then
+		TriggerMusicEvent("MP_MC_CMH_SUB_FINALE_START");
+	
+	elseif (p_0 == 69) then
+		TriggerMusicEvent("MP_MC_CMH_SILO_PREP_START");
+	
+	elseif (p_0 == 70) then
+		TriggerMusicEvent("MP_MC_CMH_SILO_FINALE_START");
+	
+	elseif (p_0 == 71) then
+		TriggerMusicEvent("MP_MC_CMH_IAA_PREP_START");
+	
+	elseif (p_0 == 72) then
+		TriggerMusicEvent("MP_MC_CMH_IAA_FINALE_START");
+	
+	elseif (p_0 == 73) then
+		TriggerMusicEvent("CMH_ADV_START");
+	
+	elseif (p_0 == 74) then
+		TriggerMusicEvent("MP_MC_ASSAULT_ADV_START");
+	
+	elseif (p_0 == 75) then
+		TriggerMusicEvent("MP_MC_CASINO_BRAWL_START");
+	
+	elseif (p_0 == 76) then
+		TriggerMusicEvent("MP_CHF_START");
+	
+	elseif (p_0 == 77) then
+		TriggerMusicEvent("MP_MC_SUM20_START");
+	
+	elseif (p_0 == 78) then
+		TriggerMusicEvent("HEI4_FIN_START_STA");
+	
+	elseif (p_0 == 79) then
+		TriggerMusicEvent("MP_MC_TUNER_START_MUSIC");
+	
+	elseif (p_0 == 80) then
+		TriggerMusicEvent("MP_MC_FIXER_HOLDOUT_START");
+	
+	elseif (p_0 == 81) then
+		TriggerMusicEvent("MP_MC_FIXER_START_MUSIC");
+	
+	elseif (p_0 == 82) then
+		TriggerMusicEvent("DATA_LEAK_GOLF_START_MUSIC");
+	
+	elseif (p_0 == 83) then
+		TriggerMusicEvent("DATA_LEAK_PARTY_PROMO_START_MUSIC");
+	
+	elseif (p_0 == 84) then
+		TriggerMusicEvent("DATA_LEAK_BILLIONAIRE_START_MUSIC");
+	
+	elseif (p_0 == 85) then
+		TriggerMusicEvent("DATA_LEAK_HOOD_PASS_START_MUSIC");
+	
+	elseif (p_0 == 86) then
+		TriggerMusicEvent("DATA_LEAK_FIRE_START_MUSIC");
+	
+	elseif (p_0 == 87) then
+		TriggerMusicEvent("DATA_LEAK_DFWD_START_MUSIC");
+	else
+		TriggerMusicEvent("MP_MC_START");
+	end 
+end
 
 Tasksync.addloop("hud",0,function()
 	HideHudComponentThisFrame( 1 ) -- Wanted Stars
@@ -360,18 +636,22 @@ Tasksync.addloop("hud",0,function()
 			TriggerEvent("nbk_crazydeluxo_images:show_home")
 			TriggerEvent("nbk_crazydeluxo_images:selection_arcade")
 			ShowRecord = false 
+			PlaySoundFrontend(-1, "PICK_UP", "HUD_FRONTEND_DEFAULT_SOUNDSET", true);
 		end 
 	end 
 	-- ungly menu code
 	if nowselection ~= nil and nowselection ~= -1 then 
 		if IsControlJustReleased(0--[[control type]],  22--[[control index]]) or IsControlJustReleased(0--[[control type]],  23--[[control index]]) or IsControlJustReleased(0--[[control type]],  21--[[control index]]) then
+			PlaySoundFrontend(-1, "PICK_UP", "HUD_FRONTEND_DEFAULT_SOUNDSET", true);
 			if nowselection == 1 then 
 				TriggerEvent('gamemode_crazydeluxo:arcade')
+				
 				--print('arcade')
 				TriggerEvent("nbk_crazydeluxo_images:end")
 				nowselection = -1
 			elseif nowselection == 2 then 
 				TriggerEvent('gamemode_crazydeluxo:original')
+				
 				--print('original')
 				TriggerEvent("nbk_crazydeluxo_images:end")
 				nowselection = -1
@@ -402,6 +682,7 @@ Tasksync.addloop("hud",0,function()
 			end 
 		end
 		if IsControlJustReleased(0--[[control type]],  172--[[control index]]) then --up 
+			PlaySoundFrontend(-1, "PICK_UP", "HUD_FRONTEND_DEFAULT_SOUNDSET", true);
 			if nowselection == 1 then 
 				nowselection = 4
 				TriggerEvent("nbk_crazydeluxo_images:selection_quit")
@@ -417,6 +698,7 @@ Tasksync.addloop("hud",0,function()
 			end 
 		end
 		if IsControlJustReleased(0--[[control type]],  173--[[control index]]) then --down
+			PlaySoundFrontend(-1, "PICK_UP", "HUD_FRONTEND_DEFAULT_SOUNDSET", true);
 			if nowselection == 1 then 
 				nowselection = 2
 				TriggerEvent("nbk_crazydeluxo_images:selection_original")
@@ -433,8 +715,15 @@ Tasksync.addloop("hud",0,function()
 		end
 	elseif nowselection == -1 then  
 		TriggerEvent("nbk_crazydeluxo_images:end")
+		PlaySoundFrontend(-1, "PICK_UP", "HUD_FRONTEND_DEFAULT_SOUNDSET", true);
+		TriggerMusicEvent("FRA1_MISSION_FAIL");
+		CancelMusicEvent("FRA1_SPEED")
+		
+		
 		nowselection = nil 
+		
 	end 
+	
 end) 
 TriggerServerEvent("es_ranking_db:getRecords","arcade")
 TriggerServerEvent("es_ranking_db:getRecords","original")

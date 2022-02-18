@@ -86,6 +86,13 @@ function IsAnyVehicleNearPlayer()
 	end 
 	return false,closestveh
 end 
+function IsAnyObjectNearPlayer()
+	local coords = GetEntityCoords(GetVehiclePedIsIn(GetPlayerPed(-1), false))
+	if IsAnyObjectNearPoint(coords,1.0) then 
+		return true 
+	end 
+	return false
+end 
 function GetClosestPed()
     local closestPed = 0
 	local pedPool = GetGamePool('CPed')
@@ -135,7 +142,6 @@ function GetClosestSidewalk(InputPos)
 	local _, fincoords = bool,finalpos --GetNthClosestVehicleNode(targetPos.x, targetPos.y, targetPos.z,  1, 1077936128, 0)
 	return fincoords
 end  
-
 math.fix = function(num, fractionDigits, round)
 	local fractionDigits = fractionDigits or 2
       local pcs = 1;
@@ -144,8 +150,6 @@ math.fix = function(num, fractionDigits, round)
       end 
       return (not round and math.floor(num * pcs) or math.floor(num * pcs+0.5)) / pcs;
 end 
-
-
 function Reload(first)
 	LastCustomer = nil 
 	CurrentCustomer = nil 
@@ -161,7 +165,8 @@ function Reload(first)
 	NowTargetCheckpoint = nil 
 	IsPlaying = false 
 	TotalPassengers = 0
-	CheckTouch = false 
+	CheckTouchNearVehicle = false 
+	CheckTouchNearObject = false 
 	if DoesEntityExist(LastVehicle) then 
 		DeleteEntity(LastVehicle)
 	end 
@@ -174,14 +179,11 @@ function Reload(first)
 	TriggerEvent("nbk_crazydeluxo_draw:setTotalEarned",0)
 	TriggerEvent("nbk_crazydeluxo_draw:setHeadNumber",-1,0.8,0.8)
 	SetWaypointOff()
-
 end 
 Reload(true)
-
 function IsDuringJob()
 	return not not JobTargetingPos
 end 
-
 function FoundCall(ped)
 	for i = 1,#PedsWhoCalled do 
 		if PedsWhoCalled[i] == ped then 
@@ -204,7 +206,6 @@ function MakeCall(ped)
 		table.insert(PedsWhoCalled,ped)
 	end 
 end 
-
 CreateThread(function()
 	while true do Wait(100)
 		--目的地和起點分別刷新
@@ -215,7 +216,6 @@ CreateThread(function()
 		end 
 	end 
 end)
-
 function MakeCurrentCustomerGone()
 	if IsPedInAnyVehicle(CurrentCustomer, false) then 
 		local vehicle = GetVehiclePedIsIn(CurrentCustomer--[[playerPed]],  false)
@@ -232,7 +232,6 @@ function MakeCurrentCustomerGone()
     end 
 	SetPedAsNoLongerNeeded(CurrentCustomer)
 end 
-
 function SearchPed(cb) 
     local closestped = GetClosestPed( )
 	ped = closestped
@@ -242,12 +241,9 @@ function SearchPed(cb)
 	   end 
 	end 
 end 	
-
 CreateThread(function() --environment
 	SetWeatherOwnedByNetwork(false)
 end)
-
-
 function DisableControls()
 	DisableControlAction(0,21,true) -- disable sprint
 	DisableControlAction(0,24,true) -- disable attack
@@ -279,12 +275,9 @@ function EnableControls()
 	DisableControlAction(0,142,false) -- disable melee
 	DisableControlAction(0,143,false) -- disable melee
 	DisableControlAction(0,75,false) -- disable exit vehicle
-	DisableControlAction(27,75,false) -- disable exit vehicle
 	DisableControlAction(0,22,false) -- disable sprint
 	DisableControlAction(0,23,false) -- disable sprint
 end 
-
-
 
 AddEventHandler('onResourceStart', function(resourceName)
   if (GetCurrentResourceName() == resourceName or resourceName == "nbk_crazydeluxo_images") then
@@ -300,8 +293,6 @@ AddEventHandler('onResourceStop', function(resourceName)
       DoScreenFadeOut(100)
   end
 end)
-
-
 -- 
 function Selection()
 	--print('selection(')

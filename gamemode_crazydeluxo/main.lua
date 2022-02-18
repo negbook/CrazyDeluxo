@@ -331,6 +331,12 @@ CreateThread(function()
 		end 
 	end)
 	while true do Wait(50)
+		if IsPauseMenuActive() then 
+			SetFrontendActive(false);
+			SetPauseMenuActive(false)
+			Reload()
+			Selection()
+		end 
 		if HasEntityCollidedWithAnything(GetVehiclePedIsIn(PlayerPedId()))   then 
 			--ClearEntityLastDamageEntity(GetVehiclePedIsIn(PlayerPedId()))
 			if Combo > 0 then 
@@ -343,16 +349,23 @@ CreateThread(function()
 			SetEntityVisible(PlayerPedId(),false, 0)
 			if DoesEntityExist(LastVehicle) then 
 				SetPedIntoVehicle(PlayerPedId(), LastVehicle, -1);
+				CreateThread(function()
+					while not (PrepareMusicEvent("FH2A_FINAL_DRIVE_RADIO")) do Wait(100)
+						
+					end 
+					TriggerMusicEvent("FH2A_FINAL_DRIVE_RADIO");
+					return
+				end)
 			end 
 		end 
 		if IsPedInAnyVehicle(PlayerPedId()) then 
 			SetEntityVisible(PlayerPedId(),true, 0)
 			SetMoreBudget()
-			local near,veh = IsAnyVehicleNearPlayer()
-			if IsPedInAnyVehicle(PlayerPedId()) and near and CheckTouch == false then 
-				CheckTouch = true 
-			elseif IsPedInAnyVehicle(PlayerPedId()) and not near and CheckTouch == true then
-				CheckTouch = false
+			local isNearVehicle = IsAnyVehicleNearPlayer()
+			if IsPedInAnyVehicle(PlayerPedId()) and isNearVehicle and CheckTouchNearVehicle == false then 
+				CheckTouchNearVehicle = true 
+			elseif IsPedInAnyVehicle(PlayerPedId()) and not isNearVehicle and CheckTouchNearVehicle == true then
+				CheckTouchNearVehicle = false
 				if IsDuringJob() and GetEntitySpeed(GetVehiclePedIsIn(PlayerPedId())) > 25.0 then 
 					--print("Get touch Fares") --撞擊後無法獲得分數
 					local Gets = 0.25*Combo * (IsEntityInAir(GetVehiclePedIsIn(PlayerPedId())) and 2 or 5)
@@ -362,6 +375,25 @@ CreateThread(function()
 						TriggerEvent("nbk_crazydeluxo_draw:getcoin",Gets)
 					end 
 					TriggerEvent("nbk_crazydeluxo_draw:setCrazyText",IsEntityInAir(GetVehiclePedIsIn(PlayerPedId())) and "Crazy Shuffle Through!" or "Crazy Through!")
+					Combo = Combo + 1
+					TriggerEvent("nbk_crazydeluxo_draw:setCombo",Combo)
+					--print(Combo)
+				end 
+			end 
+			local isNearObject = IsAnyObjectNearPlayer()
+			if IsPedInAnyVehicle(PlayerPedId()) and isNearObject and CheckTouchNearObject == false then 
+				CheckTouchNearObject = true 
+			elseif IsPedInAnyVehicle(PlayerPedId()) and not isNearObject and CheckTouchNearObject == true then
+				CheckTouchNearObject = false
+				if IsDuringJob() and GetEntitySpeed(GetVehiclePedIsIn(PlayerPedId())) > 25.0 then 
+					--print("Get touch Fares") --撞擊後無法獲得分數
+					local Gets = 0.25 * Combo * 1
+					Fares = Fares + Gets
+					TriggerEvent("nbk_crazydeluxo_draw:setFares",Fares)
+					if Gets > 0 then 
+						TriggerEvent("nbk_crazydeluxo_draw:getcoin",Gets)
+					end 
+					TriggerEvent("nbk_crazydeluxo_draw:setCrazyText","Crazy Dangerous Through!")
 					Combo = Combo + 1
 					TriggerEvent("nbk_crazydeluxo_draw:setCombo",Combo)
 					--print(Combo)
