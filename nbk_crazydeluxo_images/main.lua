@@ -1,5 +1,50 @@
-load(LoadResourceFile("tasksync", 'tasksync_with_scaleform.lua.sourcecode'))()
-load(LoadResourceFile("tasksync", 'tasksync_with_drawtext.lua.sourcecode'))()
+loop_newthread = function (duration,fn,fnclose)
+    local duration = duration 
+    local loopend = false 
+    local fn = fn 
+    local fnclose = fnclose
+    local fns = nil
+    local newthread = function() end 
+    local localcb = function(action,value) 
+        if action == "break" or action == "kill" then 
+            loopend = true
+        elseif action == "inserttask" then 
+            local insertfn = value
+            if fns == nil then 
+                fns = {fn}
+            end 
+            table.insert(fns,insertfn)
+        elseif action == "removetask" then 
+            local idx = value
+            table.remove(fns,idx)
+        elseif action == "set" then 
+            duration = value
+        elseif action == "get" then 
+            return duration
+        elseif action == "restart" then 
+            loopend = false
+            return newthread()
+        end 
+    end
+    newthread = function() 
+        CreateThread(function()
+            while not loopend do  Wait(duration)
+                if fns then 
+                    for i=1,#fns do 
+                        fns[i](localcb,i)
+                    end 
+                else 
+                    fn(localcb)
+                end 
+            end 
+            if fnclose then fnclose() end
+            return 
+        end) 
+        return localcb
+    end 
+    return newthread()
+end 
+
 PrepareMusicEvent("FRA1_SPEED");
 
 AddEventHandler('nbk_crazydeluxo_draw:getcoin', function(txt)
@@ -220,35 +265,35 @@ AddEventHandler('nbk_crazydeluxo_draw:showWarning', function(bool)
 end)
 
 AddEventHandler('nbk_crazydeluxo_images:draw', function(txt)
-	if not Tasksync.ScaleformIsDrawing('nbk_crazydeluxo_images') then 
-    Tasksync.ScaleformDraw('nbk_crazydeluxo_images',nil,5)
+	if not ScaleformIsDrawing('nbk_crazydeluxo_images') then 
+    ScaleformDraw('nbk_crazydeluxo_images',nil,5)
 	end 
 end)
 AddEventHandler('nbk_crazydeluxo_images:end', function(txt)
-    Tasksync.ScaleformEnd('nbk_crazydeluxo_images')
+    ScaleformEnd('nbk_crazydeluxo_images')
 end)
 AddEventHandler('nbk_crazydeluxo_images:selection_arcade', function(txt)
-    Tasksync.ScaleformCall('nbk_crazydeluxo_images',function(run)
+    ScaleformCall('nbk_crazydeluxo_images',function(run)
         run("SELECTION_ARCADE")
     end)
 end)
 AddEventHandler('nbk_crazydeluxo_images:selection_original', function(txt)
-    Tasksync.ScaleformCall('nbk_crazydeluxo_images',function(run)
+    ScaleformCall('nbk_crazydeluxo_images',function(run)
         run("SELECTION_ORIGINAL")
     end)
 end)
 AddEventHandler('nbk_crazydeluxo_images:selection_records', function(txt)
-    Tasksync.ScaleformCall('nbk_crazydeluxo_images',function(run)
+    ScaleformCall('nbk_crazydeluxo_images',function(run)
         run("SELECTION_RECORDS")
     end)
 end)
 AddEventHandler('nbk_crazydeluxo_images:selection_quit', function(txt)
-    Tasksync.ScaleformCall('nbk_crazydeluxo_images',function(run)
+    ScaleformCall('nbk_crazydeluxo_images',function(run)
         run("SELECTION_QUIT")
     end)
 end)
 AddEventHandler('nbk_crazydeluxo_images:show_home', function(txt)
-    Tasksync.ScaleformCall('nbk_crazydeluxo_images',function(run)
+    ScaleformCall('nbk_crazydeluxo_images',function(run)
         run("SHOW_HOME")
 		nowselection = 1
 		
@@ -257,41 +302,41 @@ AddEventHandler('nbk_crazydeluxo_images:show_home', function(txt)
     end)
 end)
 AddEventHandler('nbk_crazydeluxo_images:show_result', function(txt)
-    Tasksync.ScaleformCall('nbk_crazydeluxo_images',function(run)
+    ScaleformCall('nbk_crazydeluxo_images',function(run)
         run("SHOW_RESULT")
     end)
 end)
 AddEventHandler('nbk_crazydeluxo_images:show_records', function(txt)
-    Tasksync.ScaleformCall('nbk_crazydeluxo_images',function(run)
+    ScaleformCall('nbk_crazydeluxo_images',function(run)
         run("SHOW_RECORDS")
     end)
 end)
 AddEventHandler('nbk_crazydeluxo_images:set_records_arcade', function(rank,name,scores)
 	--print(rank,name,scores)
-    Tasksync.ScaleformCall('nbk_crazydeluxo_images',function(run)
+    ScaleformCall('nbk_crazydeluxo_images',function(run)
         run("SET_RECORDS_ARCADE",tonumber(rank),"name",name)
 		run("SET_RECORDS_ARCADE",tonumber(rank),"scores",scores)
     end)
 end)
 AddEventHandler('nbk_crazydeluxo_images:set_records_original', function(rank,name,scores)
-    Tasksync.ScaleformCall('nbk_crazydeluxo_images',function(run)
+    ScaleformCall('nbk_crazydeluxo_images',function(run)
         run("SET_RECORDS_ORIGINAL",tonumber(rank),"name",name)
 		run("SET_RECORDS_ORIGINAL",tonumber(rank),"scores",scores)
     end)
 end)
 AddEventHandler('nbk_crazydeluxo_images:setCustomers', function(num)
-    Tasksync.ScaleformCall('nbk_crazydeluxo_images',function(run)
+    ScaleformCall('nbk_crazydeluxo_images',function(run)
         run("SET_CUSTOMERS",num)
     end)
 end)
 AddEventHandler('nbk_crazydeluxo_images:setTotalEarned', function(num)
-    Tasksync.ScaleformCall('nbk_crazydeluxo_images',function(run)
+    ScaleformCall('nbk_crazydeluxo_images',function(run)
         run("SET_TOTALEARNED",num)
     end)
 end)
 
 AddEventHandler('nbk_crazydeluxo_images:setRanking', function(txt,nowmode,total)
-    Tasksync.ScaleformCall('nbk_crazydeluxo_images',function(run)
+    ScaleformCall('nbk_crazydeluxo_images',function(run)
         run("SET_RANKING",txt)
 		if nowmode and total then 
 			SetRankIntoResult(nowmode,total)
@@ -299,22 +344,22 @@ AddEventHandler('nbk_crazydeluxo_images:setRanking', function(txt,nowmode,total)
     end)
 end)
 AddEventHandler('nbk_crazydeluxo_images:setClass', function(txt)
-    Tasksync.ScaleformCall('nbk_crazydeluxo_images',function(run)
+    ScaleformCall('nbk_crazydeluxo_images',function(run)
         run("SET_CLASS",txt)
     end)
 end)
-
+local AwaitingResult = nil 
 function SetRankIntoResult(mode,total)
 	CreateThread(function()
-		TriggerServerEvent("es_ranking_db:getRecords","arcade")
-		TriggerServerEvent("es_ranking_db:getRecords","original")
-		Wait(2000)
+		TriggerServerEvent("es_ranking_db:getRecords",mode)
+		AwaitingResult = promise.new()
+      local recordsresult = Citizen.Await(AwaitingResult)
 		local nowranking = 0
 		--print(mode,#Records[mode])
-		if Records[mode] and Records[mode][1] then 
-			for i=1,#Records[mode] do 
-				--print(TotalEarned,Records[mode][i].scores,i)
-				if tonumber(total) <= tonumber(Records[mode][i].scores) then 
+		if recordsresult[1] then 
+			for i=1,#recordsresult do 
+				--print(TotalEarned,recordsresult[i].scores,i)
+				if tonumber(total) <= tonumber(recordsresult[i].scores) then 
 					nowranking = i;
 				end 
 			end 
@@ -328,7 +373,7 @@ end
 RegisterNetEvent("nbk_crazydeluxo_images:updateRecords", function(mode,records)
 	
     Records[mode] = records
-	
+	if AwaitingResult then AwaitingResult:resolve(Records[mode]) end
 	if Records then 
 		if mode == "arcade" then 
 			for i=1,#Records["arcade"] do 
@@ -617,7 +662,7 @@ PlayMusic = function(p_0,p_1,p_2)
 	end 
 end
 
-Tasksync.addloop("hud",0,function()
+loop_newthread(0,function()
 	HideHudComponentThisFrame( 1 ) -- Wanted Stars
 	HideHudComponentThisFrame( 2 ) -- Weapon Icon
 	HideHudComponentThisFrame( 3 ) -- Cash
