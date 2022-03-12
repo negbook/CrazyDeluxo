@@ -376,18 +376,22 @@ RegisterNetEvent("nbk_crazydeluxo_images:updateRecords", function(mode,records)
 	if AwaitingResult then AwaitingResult:resolve(Records[mode]) end
 	if Records then 
 		if mode == "arcade" then 
-			for i=1,#Records["arcade"] do 
-				if i <= 5 then 
-				TriggerEvent("nbk_crazydeluxo_images:set_records_arcade",i,Records["arcade"][i].playername,"$"..Records["arcade"][i].scores)
-				end 
-			end 
+         if Records["arcade"] then 
+            for i=1,#Records["arcade"] do 
+               if i <= 5 then 
+               TriggerEvent("nbk_crazydeluxo_images:set_records_arcade",i,Records["arcade"][i].playername,"$"..Records["arcade"][i].scores)
+               end 
+            end 
+         end 
 		end 
 		if mode == "original" then 
+         if Records["original"] then 
 			for i=1,#Records["original"] do 
 				if i <= 5 then 
 				TriggerEvent("nbk_crazydeluxo_images:set_records_original",i,Records["original"][i].playername,"$"..Records["original"][i].scores)
 				end 
 			end 
+         end 
 		end 
 	end 
 end)

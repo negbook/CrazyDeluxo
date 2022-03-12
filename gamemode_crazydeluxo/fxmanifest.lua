@@ -18,5 +18,6 @@ fx_version 'cerulean'
 
 dependencies {
 	'spawnmanager',
-    'mapmanager'
+    'mapmanager',
+    'mysql-async'
 }
